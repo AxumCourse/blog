@@ -1,16 +1,29 @@
 use tokio_postgres::Client;
 
 use crate::{
+    error::AppError,
+    form,
     model::{Category, CategoryID},
     Result,
 };
 
 /// 创建新分类
-pub async fn create(client: &Client, name: String) -> Result<CategoryID> {
+pub async fn create(client: &Client, frm: &form::CreateCategory) -> Result<CategoryID> {
+    // 名称是否存在
+    let n = super::count(
+        client,
+        "SELECT COUNT(*) FROM categories WHERE name=$1",
+        &[&frm.name],
+    )
+    .await?;
+    if n > 0 {
+        return Err(AppError::duplicate("同名的分类已存在"));
+    }
+
     super::insert(
         client,
         "INSERT INTO categories (name, is_del) VALUES ($1, false) RETUNING id",
-        &[&name],
+        &[&frm.name],
         "创建分类失败",
     )
     .await
@@ -26,8 +39,30 @@ pub async fn list(client: &Client) -> Result<Vec<Category>> {
     .await
 }
 
-/// 删除或恢复记录
+/// 删除或恢复分类
 pub async fn del_or_restore(client: &Client, id: i32, is_del: bool) -> Result<bool> {
     let n = super::del_or_restore(client, "categories", &id, is_del).await?;
+    Ok(n > 0)
+}
+
+/// 修改分类
+pub async fn edit(client: &Client, frm: &form::EditCategory) -> Result<bool> {
+    // 名称是否存在
+    let n = super::count(
+        client,
+        "SELECT COUNT(*) FROM categories WHERE name=$1 AND id<>$2",
+        &[&frm.name, &frm.id],
+    )
+    .await?;
+    if n > 0 {
+        return Err(AppError::duplicate("同名的分类已存在"));
+    }
+
+    let n = super::execute(
+        client,
+        "UPDATE categories SET name=$1 WHERE id=$2",
+        &[&frm.name, &frm.id],
+    )
+    .await?;
     Ok(n > 0)
 }
