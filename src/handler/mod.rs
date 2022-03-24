@@ -4,6 +4,7 @@ use axum::response::Html;
 use crate::{Result, error::AppError};
 
 pub mod frontend;
+pub mod backend;
 
 type HtmlView = Html<String>;
 
@@ -13,6 +14,7 @@ type HtmlView = Html<String>;
     Ok(Html(html))
 }
 
+/// 将错误信息记录到日志
 fn log_error(handler_name:&str) -> Box<dyn Fn(AppError)->AppError> {
      let handler_name = handler_name.to_string();
      Box::new(move |err| {
