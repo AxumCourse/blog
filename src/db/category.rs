@@ -22,7 +22,7 @@ pub async fn create(client: &Client, frm: &form::CreateCategory) -> Result<Categ
 
     super::insert(
         client,
-        "INSERT INTO categories (name, is_del) VALUES ($1, false) RETUNING id",
+        "INSERT INTO categories (name, is_del) VALUES ($1, false) RETURNING id",
         &[&frm.name],
         "创建分类失败",
     )

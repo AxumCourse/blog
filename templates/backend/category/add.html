@@ -1,0 +1,12 @@
+{% extends "./../base.html" %}
+{% block title%}添加分类{%endblock%}
+{% block toolbar %} {% include "./toolbar.html" %} {%endblock%}
+{% block content %}
+<form method="post" action="/admin/category/add">
+    <div class="mb-3">
+        <label for="name" class="form-label">名称</label>
+        <input type="text" name="name" id="name" class="form-control" placeholder="分类名称" required>
+    </div>
+    <button type="submit" class="btn btn-primary">提交</button>
+</form>
+{%endblock%}
