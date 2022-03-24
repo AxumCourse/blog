@@ -10,3 +10,16 @@ homepage = "https://axum.rs"
 description = "axum.rs专题：使用axum构建blog"
 
 [dependencies]
+tokio = { version="1", features = ["full"] }
+serde = { version="1", features = ["derive"] }
+axum = "0.4"
+config = "0.11"
+dotenv = "0.15"
+tokio-postgres = "0.7"
+tokio-pg-mapper = "0.2"
+tokio-pg-mapper-derive = "0.2"
+deadpool-postgres = { version = "0.10", features = ["serde"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+pulldown-cmark = "0.9"
+askama = "0.11"
