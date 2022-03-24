@@ -4,9 +4,10 @@ use tokio_postgres::{
     types::{FromSqlOwned, ToSql},
     GenericClient, Statement,
 };
-mod paginate;
+pub mod paginate;
+pub mod category;
 
-pub use paginate::Paginate;
+ use paginate::Paginate;
 
 const DEFAULT_PAGE_SIZE: u8 = 30;
 
@@ -133,4 +134,16 @@ where
     let data = query(client, sql, params).await?;
     let total_records = count(client, count_sql, params).await?;
     Ok(Paginate::new(page, DEFAULT_PAGE_SIZE, total_records, data))
+}
+
+
+/// 删除或恢复记录
+async fn del_or_restore(
+    client: &impl GenericClient,
+    table:&str,
+    id: &(dyn ToSql + Sync),
+    is_del: bool,
+) -> Result<u64> {
+    let sql = format!("UPDATE {} SET is_del=$1 WHERE id=$2", table);
+    execute(client, &sql, &[ &is_del, id]).await
 }
