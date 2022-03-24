@@ -1,0 +1,12 @@
+[package]
+name = "blog"
+version = "0.1.0"
+edition = "2021"
+authors = ["axum.rs <team@axum.rs>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/AxumCourse/blog"
+homepage = "https://axum.rs"
+description = "axum.rs专题：使用axum构建blog"
+
+[dependencies]
