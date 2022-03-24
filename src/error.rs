@@ -26,6 +26,15 @@ impl AppError {
     fn from_str(msg:&str, types:AppErrorType) ->Self {
         Self::new(Some(msg.to_string()), None, types)
     }
+    pub fn notfound_opt(message:Option<String>) -> Self {
+        Self::new(message, None, AppErrorType::Notfound)
+    }
+    pub fn notfound_msg(msg:&str) -> Self {
+        Self::notfound_opt(Some(msg.to_string()))
+    }
+    pub fn notfound()->Self {
+        Self::notfound_msg("没有找到符合条件的数据")
+    }
 }
 
 impl std::fmt::Display for AppError {
@@ -43,8 +52,8 @@ impl From<deadpool_postgres::PoolError> for AppError {
    }
 }
 
-impl From<tokio_pg_mapper::Error> for AppError {
-    fn from(err: tokio_pg_mapper::Error) -> Self {
+impl From<tokio_postgres::Error> for AppError {
+    fn from(err: tokio_postgres::Error) -> Self {
         Self::from_err(Box::new(err), AppErrorType::Db)
     }
 }
