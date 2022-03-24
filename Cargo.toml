@@ -1,5 +1,5 @@
 [package]
-name = "blog"
+name = "axum-rs-blog"
 version = "0.1.0"
 edition = "2021"
 authors = ["axum.rs <team@axum.rs>"]
