@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use axum::{Router,  extract::{Extension, extractor_middleware}};
-use axum_rs_blog::{handler::{backend, frontend, auth}, config, AppState, middleware};
+use axum_rs_blog::{handler::{backend, frontend }, config, AppState, middleware};
 use deadpool_postgres::Runtime;
 use dotenv::dotenv;
 
