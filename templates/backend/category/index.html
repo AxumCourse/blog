@@ -17,8 +17,8 @@
             <td>{{ item.id }}</td>
             <td>{{ item.name }}</td>
             <td>
-                <a href="/admin/category/edit?id={{ item.id }}" class="btn btn-primary btn-sm">修改</a>
-                <a href="/admin/category/del?id={{ item.id }}" class="btn btn-danger btn-sm" onclick="return confirm('确定删除「{{ item.name }}」');">删除</a>
+                <a href="/admin/category/edit/{{ item.id }}" class="btn btn-primary btn-sm">修改</a>
+                <a href="/admin/category/del/{{ item.id }}" class="btn btn-danger btn-sm" onclick="return confirm('确定删除「{{ item.name }}」');">删除</a>
             </td>
         </tr>
         {%endfor%}

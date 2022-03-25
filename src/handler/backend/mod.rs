@@ -9,7 +9,8 @@ pub mod index;
 pub fn router() -> Router {
     let category_router = Router::new()
         .route("/", get(category::index))
-        .route("/add", get(category::add_ui).post(category::add));
+        .route("/add", get(category::add_ui).post(category::add))
+        .route("/del/:id", get(category::del));
     Router::new()
         .route("/", get(index))
         .nest("/category", category_router)
