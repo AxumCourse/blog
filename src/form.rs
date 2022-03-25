@@ -21,3 +21,6 @@ pub struct CreateTopic {
     pub summary: String,
     pub markdown: String,
 }
+
+
+pub type EditTopic = CreateTopic;

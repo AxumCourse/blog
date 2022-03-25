@@ -44,3 +44,13 @@ impl TopicList {
 pub struct TopicID {
     pub id:i64,
 }
+
+#[derive(PostgresMapper, Serialize)]
+#[pg_mapper(table="topics")]
+pub struct TopicEditData {
+    pub id:i64,
+    pub title: String,
+    pub category_id: i32,
+    pub summary: String,
+    pub markdown: String,
+}

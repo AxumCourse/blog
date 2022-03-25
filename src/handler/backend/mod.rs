@@ -17,6 +17,8 @@ pub fn router() -> Router {
     let topic_router = Router::new()
         .route("/", get(topic::index))
         .route("/add", get(topic::add_ui).post(topic::add))
+        .route("/edit/:id", get(topic::edit_ui).post(topic::edit))
+        .route("/del/:id", get(topic::del))
         ;
     Router::new()
         .route("/", get(index))
