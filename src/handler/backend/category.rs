@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use axum::extract::{Extension, Form, Query, Path};
 
-use crate::{Result, handler::{HtmlView, render, log_error, RedirectView, redirect, get_client}, view::backend::category::{Add, Index, Edit}, AppState, form, db::category};
+use crate::{Result, handler::{HtmlView, render, log_error, RedirectView, redirect, get_client}, view::backend::category::{Add, Index, Edit}, AppState, form::{self, EditCategory}, db::category};
 
 use super::Args;
 
@@ -56,4 +56,14 @@ pub async fn edit_ui(
     let item = category::find(&client, id).await.map_err(log_error(handler_name))?;
     let tmpl = Edit { item };
     render(tmpl).map_err(log_error(handler_name))
+}
+
+pub async fn edit(
+    Extension(state):Extension<Arc<AppState>>,
+    Form(frm):Form<EditCategory>,
+)->Result<RedirectView> {
+    let handler_name = "backend/category/edit";
+    let client = get_client(&state).await.map_err(log_error(handler_name))?;
+    category::edit(&client, &frm).await.map_err(log_error(handler_name))?;
+    redirect("/admin/category?msg=分类修改成功")
 }
