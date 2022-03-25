@@ -1,0 +1,35 @@
+<nav>
+    <ul class="pagination">
+        {% if list.has_prev() %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page - 1 }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link"  aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+        {%for i in 0..list.total_pages%}
+        <li class="page-item{% if list.is_active(i) %} active{%endif%}" aria-current="page">
+            <a class="page-link" href="?page={{i}}">{{ i+1 }}</a>
+        </li>
+        {%endfor%}
+        {% if list.has_next() %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{page+1}}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link"  aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>

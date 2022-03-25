@@ -4,7 +4,7 @@ use tokio_postgres::Client;
 
 use crate::{form, Result, model::{TopicID, TopicList}};
 
-use super::Paginate;
+use super::{Paginate, DEFAULT_PAGE_SIZE};
 
 pub async fn create(client:&Client, frm:&form::CreateTopic) -> Result<TopicID> {
     let html = "html";
@@ -14,7 +14,7 @@ pub async fn create(client:&Client, frm:&form::CreateTopic) -> Result<TopicID> {
 
 
 pub async fn list(client:&Client, page:u32)->Result<Paginate< Vec<TopicList>>> {
-    let sql="SELECT id,title,category_id,summary,hit,dateline,is_del,category_name FROM v_topic_cat_list WHERE is_del=false";
+    let sql=format!("SELECT id,title,category_id,summary,hit,dateline,is_del,category_name FROM v_topic_cat_list WHERE is_del=false ORDER BY id DESC LIMIT {} OFFSET {}", DEFAULT_PAGE_SIZE, DEFAULT_PAGE_SIZE as u32 * page);
     let count_sql="SELECT COUNT(*) FROM v_topic_cat_list WHERE is_del=false";
-    super::pagination(client, sql, count_sql, &[],page ).await
+    super::pagination(client, &sql, count_sql, &[],page ).await
 }
