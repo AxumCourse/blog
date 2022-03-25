@@ -5,7 +5,7 @@ use axum::extract::{Extension, Path, Query};
 use crate::{
     db::{category, topic},
     handler::{get_client, log_error, render, HtmlView},
-    view::frontend::topic::List,
+    view::frontend::topic::{List, Detail},
     AppState, Result,
 };
 
@@ -37,6 +37,28 @@ pub async fn list(
         archives,
         category_name: cat.name.clone(),
         page,
+    };
+    render(tmpl).map_err(log_error(handler_name))
+}
+
+pub async fn detail(
+    Extension(state): Extension<Arc<AppState>>,
+    Path(id): Path<i64>,
+) -> Result<HtmlView> {
+    let handler_name = "frontend/topic/list";
+    let client = get_client(&state).await.map_err(log_error(handler_name))?;
+    let cats = category::list(&client)
+        .await
+        .map_err(log_error(handler_name))?;
+    let archives = topic::archive_list(&client)
+        .await
+        .map_err(log_error(handler_name))?;
+    let state = state.clone();
+    let item = topic::detail(&client, id).await.map_err(log_error(handler_name))?;
+    let tmpl = Detail {
+        cats,
+        archives,
+        item,
     };
     render(tmpl).map_err(log_error(handler_name))
 }

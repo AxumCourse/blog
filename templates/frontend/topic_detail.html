@@ -1,0 +1,14 @@
+{%extends "./base.html"%}
+{%block category_name%}{{item.category_name}}{%endblock%}
+{% block content %}
+<article class="blog-post">
+    <h2 class="blog-post-title">
+        <a href="/topic/{{item.id}}">{{item.title}}</a>
+    </h2>
+    <p class="blog-post-meta">
+        <a href="https://axum.rs" target="_blank">AXUM.RS</a> 发表于 {{item.dateline()}} [<a href="/category/{{item.category_id}}">{{item.category_name}}</a>] 浏览次数：{{ item.hit}}
+    </p>
+
+    {{ item.html|safe }}
+</article>
+{% endblock %}

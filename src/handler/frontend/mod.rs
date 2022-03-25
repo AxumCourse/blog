@@ -13,6 +13,7 @@ pub fn router()->Router {
         .route("/auth", get(login_ui).post(login))
         .route("/logout", get(logout))
         .route("/category/:id", get(topic::list))
+        .route("/topic/:id", get(topic::detail))
 }
 #[derive(Deserialize)]
 pub struct Args {
