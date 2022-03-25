@@ -3,17 +3,17 @@ use std::sync::Arc;
 use axum::{
     extract::{Extension, Form},
     routing::get,
-    Router,
+    Router 
 };
 
 use crate::{
     db::admin,
     error::{AppError, AppErrorType},
     form::AdminLogin,
-    handler::get_client,
+    handler::{get_client,  redirect_with_cookie},
     password,
     view::auth::Login,
-    AppState, Result,
+    AppState, Result, cookie,
 };
 
 use super::{log_error, redirect, render, HtmlView, RedirectView};
@@ -43,9 +43,9 @@ pub async fn login(
     if !verify {
         return Err(AppError::incorrect_login());
     }
-    redirect("/admin")
+    redirect_with_cookie("/admin", Some(&admin_info.email))
 }
 
 pub fn router() -> Router {
-    Router::new().route("/login", get(login_ui).post(login))
+    Router::new().route("/", get(login_ui).post(login))
 }

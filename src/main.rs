@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
-use axum::{Router,  extract::Extension};
-use axum_rs_blog::{handler::{backend, frontend, auth}, config, AppState};
+use axum::{Router,  extract::{Extension, extractor_middleware}};
+use axum_rs_blog::{handler::{backend, frontend, auth}, config, AppState, middleware};
 use deadpool_postgres::Runtime;
 use dotenv::dotenv;
 
@@ -18,7 +18,7 @@ async fn main() {
 
 
     let frentend_routers = frontend::router();
-    let backend_routers = backend::router();
+    let backend_routers = backend::router().layer(extractor_middleware::<middleware::Auth>());
     let auth_routers = auth::router();
     let app = Router::new()
         .nest("/", frentend_routers)
