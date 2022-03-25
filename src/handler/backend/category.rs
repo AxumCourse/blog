@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use axum::extract::{Extension, Form, Query, Path};
 
-use crate::{Result, handler::{HtmlView, render, log_error, RedirectView, redirect, get_client}, view::backend::category::{Add, Index}, AppState, form, db::category};
+use crate::{Result, handler::{HtmlView, render, log_error, RedirectView, redirect, get_client}, view::backend::category::{Add, Index, Edit}, AppState, form, db::category};
 
 use super::Args;
 
@@ -41,8 +41,19 @@ pub async fn del(
     Extension(state):Extension<Arc<AppState>>,
     Path(id):Path<i32>,
 ) -> Result<RedirectView> {
-    let handler_name = "backend/category/index";
+    let handler_name = "backend/category/del";
     let client = get_client(&state).await.map_err(log_error(handler_name))?;
     category::del_or_restore(&client, id, true).await.map_err(log_error(handler_name))?;
     redirect("/admin/category?msg=分类删除成功")
+}
+
+pub async fn edit_ui(
+    Extension(state):Extension<Arc<AppState>>,
+    Path(id):Path<i32>,
+) -> Result<HtmlView> {
+    let handler_name = "backend/category/edit_ui";
+    let client = get_client(&state).await.map_err(log_error(handler_name))?;
+    let item = category::find(&client, id).await.map_err(log_error(handler_name))?;
+    let tmpl = Edit { item };
+    render(tmpl).map_err(log_error(handler_name))
 }

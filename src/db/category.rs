@@ -66,3 +66,8 @@ pub async fn edit(client: &Client, frm: &form::EditCategory) -> Result<bool> {
     .await?;
     Ok(n > 0)
 }
+
+/// 根据ID查找分类
+pub async fn find(client: &Client, id:i32) ->Result<Category> {
+    super::query_row(client, "SELECT id, name, is_del FROM categories WHERE id=$1 LIMIT 1", &[&id]).await
+}

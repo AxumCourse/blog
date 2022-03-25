@@ -12,3 +12,8 @@ pub struct Index{
     pub list: Vec<Category>,
     pub msg: Option<String>,
 }
+#[derive(Template)]
+#[template(path="backend/category/edit.html")]
+pub struct Edit{
+    pub item: Category,
+}
