@@ -1,6 +1,6 @@
 use std::time;
 
-use tokio_postgres::Client;
+use tokio_postgres::{Client, types::ToSql};
 
 use crate::{
     form::{self, EditTopic},
@@ -21,10 +21,24 @@ pub async fn create(client: &Client, frm: &form::CreateTopic) -> Result<TopicID>
     super::insert(client, "INSERT INTO topics (title,category_id, summary, markdown, html, hit, dateline, is_del) VALUES ($1, $2, $3, $4, $5, 0, $6, false) RETURNING id", &[&frm.title, &frm.category_id, &frm.summary, &frm.markdown, &html,  &dateline ], "添加文章失败").await
 }
 
+async fn list_by_condition(client:&Client, page:u32, condition:Option<&str>, params:Option<&[&(dyn ToSql + Sync)]>) -> Result<Paginate<Vec<TopicList>>> {
+    let sql = "SELECT id,title,category_id,summary,hit,dateline,is_del,category_name FROM v_topic_cat_list WHERE is_del=false %CONDITION% ORDER BY id DESC ";
+    let condition = match condition {
+        Some(c) => format!(" AND {}", c),
+        None => "".to_string(),
+    };
+    let sql = sql.replace("%CONDITION%", &condition);
+    let sql=format!("{} LIMIT {} OFFSET {}",sql, DEFAULT_PAGE_SIZE, DEFAULT_PAGE_SIZE as u32 * page);
+    let count_sql = "SELECT COUNT(*) FROM v_topic_cat_list WHERE is_del=false %CONDITION%";
+    let count_sql = count_sql.replace("%CONDITION%", &condition);
+    let params = params.unwrap_or(&[]);
+    super::pagination(client, &sql, &count_sql, params, page).await
+}
 pub async fn list(client: &Client, page: u32) -> Result<Paginate<Vec<TopicList>>> {
-    let sql=format!("SELECT id,title,category_id,summary,hit,dateline,is_del,category_name FROM v_topic_cat_list WHERE is_del=false ORDER BY id DESC LIMIT {} OFFSET {}", DEFAULT_PAGE_SIZE, DEFAULT_PAGE_SIZE as u32 * page);
-    let count_sql = "SELECT COUNT(*) FROM v_topic_cat_list WHERE is_del=false";
-    super::pagination(client, &sql, count_sql, &[], page).await
+    list_by_condition(client, page, None, None).await
+}
+pub async fn list_by_cat(client: &Client, page: u32, cat_id: i32) -> Result<Paginate<Vec<TopicList>>> {
+    list_by_condition(client, page, Some("category_id=$1"), Some(&[&cat_id])).await
 }
 
 pub async fn update(client: &Client, frm: &EditTopic, id: i64) -> Result<bool> {
