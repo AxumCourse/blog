@@ -1,0 +1,7 @@
+{% match msg %}
+{% when Some with (msg) %}
+  <div class="alert alert-info" role="alert">
+    {{msg}}
+  </div>
+{% when None %}
+{% endmatch %}

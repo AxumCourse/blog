@@ -33,7 +33,7 @@ pub async fn create(client: &Client, frm: &form::CreateCategory) -> Result<Categ
 pub async fn list(client: &Client) -> Result<Vec<Category>> {
     super::query(
         client,
-        "SELECT id,name,is_del FROM categories WHERE is_del=false ORDER BY id ASC",
+        "SELECT id,name,is_del FROM categories WHERE is_del=false ORDER BY id ASC LIMIT 1000",
         &[],
     )
     .await
