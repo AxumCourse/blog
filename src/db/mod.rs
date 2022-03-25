@@ -4,10 +4,12 @@ use tokio_postgres::{
     types::{FromSqlOwned, ToSql},
     GenericClient, Statement,
 };
-pub mod paginate;
-pub mod category;
+ mod paginate;
 
- use paginate::Paginate;
+pub mod category;
+pub mod topic;
+
+pub use paginate::Paginate;
 
 const DEFAULT_PAGE_SIZE: u8 = 30;
 

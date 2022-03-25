@@ -1,0 +1,29 @@
+{% extends "./../base.html" %}
+{% block title%}添加文章{%endblock%}
+{% block toolbar %} {% include "./toolbar.html" %} {%endblock%}
+{% block content %}
+<form method="post" action="/admin/topic/add">
+    <div class="mb-3">
+        <label for="title" class="form-label">标题</label>
+        <input type="text" name="title" id="title" class="form-control" placeholder="文章标题" required>
+    </div>
+    <div class="mb-3">
+        <label for="category_id" class="form-label">分类</label>
+        <select id="category_id" name="category_id" class="form-select" required>
+            <option value="">--请选择--</option>
+            {% for cat in cats %}
+            <option value="{{cat.id}}">{{cat.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="summary" class="form-label">摘要</label>
+        <textarea class="form-control" id="summary" name="summary" rows="3" placeholder="在此输入文章摘要" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="markdown" class="form-label">内容(Markdown)</label>
+        <textarea class="form-control" id="markdown" name="markdown" rows="3" placeholder="在此输入文章文章内容" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">提交</button>
+</form>
+{%endblock%}
