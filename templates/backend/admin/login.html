@@ -1,0 +1,15 @@
+{% extends "./../base.html" %}
+{% block title%}用户登录{%endblock%}
+{% block content %}
+<form method="post" action="/auth/login">
+    <div class="mb-3">
+        <label for="email" class="form-label">邮箱</label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="邮箱" required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">密码</label>
+        <input type="password" name="password" id="password" class="form-control" placeholder="密码" required>
+    </div>
+    <button type="submit" class="btn btn-primary">登录</button>
+</form>
+{%endblock%}

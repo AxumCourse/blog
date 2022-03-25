@@ -54,3 +54,12 @@ pub struct TopicEditData {
     pub summary: String,
     pub markdown: String,
 }
+
+#[derive(PostgresMapper, Serialize)]
+#[pg_mapper(table="admins")]
+pub struct Admin {
+    pub id:i32,
+    pub email:String,
+    pub password:String,
+    pub is_del:bool,
+}

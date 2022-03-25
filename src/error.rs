@@ -7,6 +7,8 @@ pub enum AppErrorType {
     Template,
     Notfound,
     Duplicate,
+    Crypt,
+    IncorrectLogin,
 }
 
 /// 应用程序错误
@@ -47,6 +49,9 @@ impl AppError {
     pub fn duplicate(msg: &str) -> Self {
         Self::from_str(msg, AppErrorType::Duplicate)
     }
+    pub fn incorrect_login() -> Self {
+        Self::from_str("错误的邮箱或密码", AppErrorType::IncorrectLogin)
+    }
 }
 
 impl std::fmt::Display for AppError {
@@ -72,6 +77,12 @@ impl From<tokio_postgres::Error> for AppError {
 impl From<askama::Error> for AppError {
     fn from(err: askama::Error) -> Self {
         Self::from_err(Box::new(err), AppErrorType::Template)
+    }
+}
+
+impl From<bcrypt::BcryptError> for AppError {
+    fn from(err: bcrypt::BcryptError) -> Self {
+        Self::from_err(Box::new(err), AppErrorType::Crypt)
     }
 }
 

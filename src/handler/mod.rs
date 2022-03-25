@@ -6,6 +6,7 @@ use crate::{Result, error::AppError, AppState};
 
 pub mod frontend;
 pub mod backend;
+pub mod auth;
 
 type HtmlView = Html<String>;
 type RedirectView = (StatusCode, HeaderMap, ());

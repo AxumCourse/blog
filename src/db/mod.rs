@@ -8,6 +8,7 @@ use tokio_postgres::{
 
 pub mod category;
 pub mod topic;
+pub mod admin;
 
 pub use paginate::Paginate;
 

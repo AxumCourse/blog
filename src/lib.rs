@@ -6,6 +6,7 @@ pub mod model;
 pub mod form;
 pub mod config;
 mod md;
+mod password;
 
 pub type Result<T> = std::result::Result<T, error::AppError>;
 

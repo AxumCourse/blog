@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use axum::{Router,  extract::Extension};
-use axum_rs_blog::{handler::{backend, frontend}, config, AppState};
+use axum_rs_blog::{handler::{backend, frontend, auth}, config, AppState};
 use deadpool_postgres::Runtime;
 use dotenv::dotenv;
 
@@ -19,9 +19,11 @@ async fn main() {
 
     let frentend_routers = frontend::router();
     let backend_routers = backend::router();
+    let auth_routers = auth::router();
     let app = Router::new()
         .nest("/", frentend_routers)
         .nest("/admin", backend_routers)
+        .nest("/auth", auth_routers)
         .layer(Extension(Arc::new(AppState { pool})));
 
     tracing::info!("服务已启动：{}", &cfg.web.addr);

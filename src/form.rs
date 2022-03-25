@@ -24,3 +24,9 @@ pub struct CreateTopic {
 
 
 pub type EditTopic = CreateTopic;
+
+#[derive(Deserialize)]
+pub struct AdminLogin {
+    pub email:String,
+    pub password:String,
+}
