@@ -5,13 +5,13 @@ use tokio_postgres::Client;
 use crate::{
     form::{self, EditTopic},
     model::{TopicEditData, TopicID, TopicList},
-    Result,
+    Result, md,
 };
 
 use super::{Paginate, DEFAULT_PAGE_SIZE};
 
-fn md2html(md: &str) -> String {
-    "html".to_string()
+fn md2html(markdown: &str) -> String {
+    md::to_html(markdown)
 }
 
 pub async fn create(client: &Client, frm: &form::CreateTopic) -> Result<TopicID> {
