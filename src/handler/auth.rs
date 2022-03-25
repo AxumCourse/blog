@@ -1,22 +1,18 @@
 use std::sync::Arc;
 
-use axum::{
-    extract::{Extension, Form},
-    routing::get,
-    Router 
-};
+use axum::extract::{Extension, Form};
 
 use crate::{
     db::admin,
     error::{AppError, AppErrorType},
     form::AdminLogin,
-    handler::{get_client,  redirect_with_cookie},
+    handler::{get_client, redirect_with_cookie},
     password,
     view::auth::Login,
-    AppState, Result, cookie,
+    AppState, Result,
 };
 
-use super::{log_error, redirect, render, HtmlView, RedirectView};
+use super::{log_error, render, HtmlView, RedirectView};
 
 pub async fn login_ui() -> Result<HtmlView> {
     let handler_name = "auth/login_ui";
@@ -46,6 +42,6 @@ pub async fn login(
     redirect_with_cookie("/admin", Some(&admin_info.email))
 }
 
-pub fn router() -> Router {
-    Router::new().route("/", get(login_ui).post(login))
+pub async fn logout() -> Result<RedirectView> {
+    redirect_with_cookie("/auth", Some(""))
 }

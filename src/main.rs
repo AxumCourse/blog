@@ -19,11 +19,9 @@ async fn main() {
 
     let frentend_routers = frontend::router();
     let backend_routers = backend::router().layer(extractor_middleware::<middleware::Auth>());
-    let auth_routers = auth::router();
     let app = Router::new()
         .nest("/", frentend_routers)
         .nest("/admin", backend_routers)
-        .nest("/auth", auth_routers)
         .layer(Extension(Arc::new(AppState { pool})));
 
     tracing::info!("服务已启动：{}", &cfg.web.addr);

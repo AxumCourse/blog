@@ -12,9 +12,10 @@ where
     async fn from_request(req: &mut RequestParts<B>) -> Result<Self, Self::Rejection> {
         let headers = req.headers().unwrap();
         let cookie = cookie::get_cookie(headers);
-        if cookie.is_none() {
+        let auth = cookie.unwrap_or("".to_string());
+        if  auth.is_empty() {
             return Err(AppError::forbidden());
         }
-        Ok(Auth(cookie.unwrap()))
+        Ok(Auth(auth))
     }
 }
