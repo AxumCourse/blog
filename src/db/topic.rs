@@ -4,8 +4,9 @@ use tokio_postgres::Client;
 
 use crate::{
     form::{self, EditTopic},
-    model::{TopicEditData, TopicID, TopicList},
-    Result, md,
+    md,
+    model::{TopicArchive, TopicEditData, TopicID, TopicList},
+    Result,
 };
 
 use super::{Paginate, DEFAULT_PAGE_SIZE};
@@ -58,4 +59,13 @@ pub async fn find2edit(client: &Client, id: i64) -> Result<TopicEditData> {
 pub async fn del_or_restore(client: &Client, id: i64, is_del: bool) -> Result<bool> {
     let n = super::del_or_restore(client, "topics", &id, is_del).await?;
     Ok(n > 0)
+}
+
+pub async fn archive_list(client: &Client) -> Result<Vec<TopicArchive>> {
+    let sql = "SELECT
+       to_char(DATE_TRUNC('month',dateline), 'YYYY年MM月')
+         AS  dateline
+FROM topics
+GROUP BY to_char(DATE_TRUNC('month',dateline), 'YYYY年MM月')";
+    super::query(client, sql, &[]).await
 }

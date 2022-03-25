@@ -56,6 +56,11 @@ pub struct TopicEditData {
 }
 
 #[derive(PostgresMapper, Serialize)]
+#[pg_mapper(table="topics")]
+pub struct TopicArchive {
+    pub dateline: String,
+}
+#[derive(PostgresMapper, Serialize)]
 #[pg_mapper(table="admins")]
 pub struct Admin {
     pub id:i32,
