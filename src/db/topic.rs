@@ -54,6 +54,14 @@ pub async fn list_by_cat(
 ) -> Result<Paginate<Vec<TopicList>>> {
     list_by_condition(client, page, Some("category_id=$1"), Some(&[&cat_id])).await
 }
+pub async fn list_by_arch(
+    client: &Client,
+    page: u32,
+    dt:String,
+) -> Result<Paginate<Vec<TopicList>>> {
+    let condition = format!("dateline BETWEEN '{}'::timestamp AND '{}'::timestamp + (INTERVAL '1' MONTH) - (INTERVAL '1' SECOND)", &dt, &dt);
+    list_by_condition(client, page, Some(&condition), Some(&[])).await
+}
 
 pub async fn update(client: &Client, frm: &EditTopic, id: i64) -> Result<bool> {
     let html = md2html(&frm.markdown);

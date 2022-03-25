@@ -1,0 +1,19 @@
+{%extends "./base.html"%}
+{%block category_name%}{{dt}}{%endblock%}
+{% block content %}
+{% for item in list.data %}
+<article class="blog-post">
+    <h2 class="blog-post-title">
+        <a href="/topic/{{item.id}}">{{item.title}}</a>
+    </h2>
+    <p class="blog-post-meta">
+        <a href="https://axum.rs" target="_blank">AXUM.RS</a> 发表于 {{item.dateline()}} [<a href="/category/{{item.category_id}}">{{item.category_name}}</a>]
+    </p>
+
+    {{ item.summary }}
+</article>
+{%endfor%}
+{% endblock %}
+{% block paginate %}
+{%include "../pagination.html"%}
+{%endblock%}

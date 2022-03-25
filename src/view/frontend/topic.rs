@@ -18,3 +18,12 @@ pub struct Detail {
     pub archives: Vec<TopicArchive>,
     pub item: TopicDetail,
 }
+#[derive(Template)]
+#[template(path="frontend/topic_arch.html")]
+pub struct ArchiveList {
+    pub list: Paginate<Vec<TopicList>>,
+    pub page : u32,
+    pub cats: Vec<Category>,
+    pub archives: Vec<TopicArchive>,
+    pub dt: String,
+}

@@ -14,6 +14,7 @@ pub fn router()->Router {
         .route("/logout", get(logout))
         .route("/category/:id", get(topic::list))
         .route("/topic/:id", get(topic::detail))
+        .route("/archive/:dt", get(topic::archive))
 }
 #[derive(Deserialize)]
 pub struct Args {

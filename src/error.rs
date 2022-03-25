@@ -13,6 +13,7 @@ pub enum AppErrorType {
     Crypt,
     IncorrectLogin,
     Forbidden,
+    Chrono,
 }
 
 /// 应用程序错误
@@ -104,6 +105,11 @@ impl From<askama::Error> for AppError {
 impl From<bcrypt::BcryptError> for AppError {
     fn from(err: bcrypt::BcryptError) -> Self {
         Self::from_err(Box::new(err), AppErrorType::Crypt)
+    }
+}
+impl From<chrono::ParseError> for AppError {
+    fn from(err: chrono::ParseError) -> Self {
+        Self::from_err(Box::new(err), AppErrorType::Chrono)
     }
 }
 
