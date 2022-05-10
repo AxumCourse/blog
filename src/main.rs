@@ -17,10 +17,10 @@ async fn main() {
     let pool = cfg.pg.create_pool(Some(Runtime::Tokio1), tokio_postgres::NoTls).expect("创建数据库连接池失败");
 
 
-    let frentend_routers = frontend::router();
+    let frontend_routers = frontend::router();
     let backend_routers = backend::router().layer(extractor_middleware::<middleware::Auth>());
     let app = Router::new()
-        .nest("/", frentend_routers)
+        .nest("/", frontend_routers)
         .nest("/admin", backend_routers)
         .layer(Extension(Arc::new(AppState { pool})));
 
